@@ -73,12 +73,12 @@
   \end{multicols}
 \end{frame}
 
-\section{How similar are the layers?}
+\section{Layer-wise similarity}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries How similar are the layers?}
+    {\usebeamercolor[fg]{structure}\Large\bfseries Layer-wise similarity}
   \end{center}
   \vfill
 \end{frame}
@@ -255,12 +255,12 @@
   \end{center}
 \end{frame}
 
-\section{Does it change with scale?}
+\section{Similarity across scale}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries Does it change with scale?}
+    {\usebeamercolor[fg]{structure}\Large\bfseries Similarity across scale}
   \end{center}
   \vfill
 \end{frame}
@@ -463,12 +463,12 @@
   \end{center}
 \end{frame}
 
-\section{The geometry itself}
+\section{Representational geometry}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries The geometry itself}
+    {\usebeamercolor[fg]{structure}\Large\bfseries Representational geometry}
   \end{center}
   \vfill
 \end{frame}
@@ -588,135 +588,135 @@
   \vfill
 \end{frame}
 
-\begin{frame}{A permutation moves the weights as far as possible and changes nothing}
+\begin{frame}{Equal parameter movement, unequal functional cost}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig23_invariance.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize Four transformations of one checkpoint. The valid permutations are exact to round-off; a random orthogonal moves the weights the same distance and breaks the function 29,000$\times$ more.}
 \end{frame}
 
-\section{Provenance determines the cost of composing}
+\section{Provenance determines composition cost}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries Provenance determines the cost of composing}
+    {\usebeamercolor[fg]{structure}\Large\bfseries Provenance determines composition cost}
   \end{center}
   \vfill
 \end{frame}
 
-\begin{frame}{Initialisation costs four times what data order costs, and only the first is removable}
+\begin{frame}{The largest composition costs are the most removable}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig21_provenance_ladder.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize A fitted map removes 93\% of the initialisation gap and makes the data-order gap \emph{worse} by 27\%. The curriculum rung splits by whether the pair shares an initialisation --- a split recovered from the weights, not the training logs.}
 \end{frame}
 
-\begin{frame}{The gap is there at every depth, not at one seam}
+\begin{frame}{The gap persists across depth}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig20_stitch_curves.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize Stitch penalty as a function of where the two models are joined.}
 \end{frame}
 
-\section{A diagnostic that reads provenance off the weights}
+\section{A diagnostic for reading provenance from weights}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries A diagnostic that reads provenance off the weights}
+    {\usebeamercolor[fg]{structure}\Large\bfseries A diagnostic for reading provenance from weights}
   \end{center}
   \vfill
 \end{frame}
 
-\begin{frame}{The removable component predicts the rescue alignment delivers}
+\begin{frame}{The removable component predicts alignment rescue}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig22_signature.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize One point per pair, $r = +0.87$. The two curriculum sub-conditions --- same nominal label, opposite outcome --- are separated by the diagnostic alone.}
 \end{frame}
 
-\section{2,320 merges say the same thing}
+\section{2,320 merges confirm the same pattern}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries 2,320 merges say the same thing}
+    {\usebeamercolor[fg]{structure}\Large\bfseries 2,320 merges confirm the same pattern}
   \end{center}
   \vfill
 \end{frame}
 
-\begin{frame}{Alignment recovers $+0.244$ nats when models were initialised apart, and nothing when they were not}
+\begin{frame}{Alignment rescues independently initialised models, not shared-initialisation models}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig26_merge_rescue.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize (a) Paired naive vs aligned per cell; the shared-init cloud lies on the diagonal. (b) Effect size by initialisation class. (c) The effect survives operator choice.}
 \end{frame}
 
-\section{Ruling out the alternatives}
+\section{Ruling out alternative explanations}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries Ruling out the alternatives}
+    {\usebeamercolor[fg]{structure}\Large\bfseries Ruling out alternative explanations}
   \end{center}
   \vfill
 \end{frame}
 
-\begin{frame}{The symmetry buys $39\times$ what an equal reduction in weight distance buys}
+\begin{frame}{Alignment works through symmetry, not distance reduction}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig25_distance_matched.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize Rescue against the distance reduction that bought it. The interpolation arms lie on a shallow line through the origin; the fitted map is nowhere near it.}
 \end{frame}
 
-\begin{frame}{The richest map is the worst one: $GL(d)$ loses to doing nothing}
+\begin{frame}{The richest map performs worst}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig27_group_ladder.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize Benefit is not monotone in the group. It peaks at the orthogonal class and collapses at $GL(d)$, which contains every other class. Membership in the group is the currency, not flexibility.}
 \end{frame}
 
-\section{The obstruction is fixed at step 0}
+\section{The obstruction is present at step 0}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries The obstruction is fixed at step 0}
+    {\usebeamercolor[fg]{structure}\Large\bfseries The obstruction is present at step 0}
   \end{center}
   \vfill
 \end{frame}
 
-\begin{frame}{The cost of composing grows $916\times$; the share a map removes never drops below 92\%}
+\begin{frame}{Incompatibility grows during training but remains coordinate}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig24_trajectory.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize Along the checkpoint sequence of three seed-separated pairs. A smooth rise with no cliff --- the opposite of a phase transition.}
 \end{frame}
 
-\section{It replicates on another lab's models}
+\section{The result replicates on another lab's models}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries It replicates on another lab's models}
+    {\usebeamercolor[fg]{structure}\Large\bfseries The result replicates on another lab's models}
   \end{center}
   \vfill
 \end{frame}
 
-\begin{frame}{The dissociation holds on PolyPythia: a different architecture, tokenizer, language, corpus and lab}
+\begin{frame}{The dissociation replicates across architecture, tokenizer, language, and lab}
   \begin{center}
     \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{figures/fig28_external.pdf}
   \end{center}
   \vspace{-0.3em}{\footnotesize The residual-basis factor survives acceptance on exactly the independently initialised pairs.}
 \end{frame}
 
-\section{All of it, in numbers}
+\section{The results in numbers}
 
 \begin{frame}[plain,noframenumbering]
   \vfill
   \begin{center}
-    {\usebeamercolor[fg]{structure}\Large\bfseries All of it, in numbers}
+    {\usebeamercolor[fg]{structure}\Large\bfseries The results in numbers}
   \end{center}
   \vfill
 \end{frame}
@@ -739,7 +739,7 @@ head permutation          & $0.2808$ & $0.0206$ & $3.0\times10^{-7}$ \\
   \begin{minipage}{0.92\textwidth}\footnotesize Mean over five checkpoints. Only the last is not a symmetry.\end{minipage}
 \end{frame}
 
-\begin{frame}{The provenance ladder: initialisation is the rung that is removable}
+\begin{frame}{The provenance ladder: initialisation is the removable rung}
   \centering
   \small
   \small
@@ -760,7 +760,7 @@ exactly $0.000$ at every seam and rung; a random orthogonal is worse than no map
 factors of two to five.\end{minipage}
 \end{frame}
 
-\begin{frame}{Cut on initialisation, the rescue is $+0.244$ against $-0.000$}
+\begin{frame}{Cut by initialisation, rescue is $+0.244$ versus $-0.000$}
   \centering
   \small
   \small
@@ -777,7 +777,7 @@ indep.\ init (curric.\ reg.)& 8   & $+0.238$ & $[+0.214,+0.261]$ & $94\%$ \\
   \begin{minipage}{0.92\textwidth}\footnotesize Cut on initialisation, not on the experiment's own regime labels.\end{minipage}
 \end{frame}
 
-\begin{frame}{Walking the symmetry hierarchy: benefit stops before the top}
+\begin{frame}{The symmetry hierarchy: benefit stops before the top}
   \centering
   \small
   \small
@@ -796,7 +796,7 @@ first language        & $1.124$ & $0.581$ & $1.199$ & $\mathbf{0.428}$ & $3.030$
   \begin{minipage}{0.92\textwidth}\footnotesize Stitch penalty, deep seams. A random orthogonal scores $1.66$--$2.33$ across these rungs.\end{minipage}
 \end{frame}
 
-\begin{frame}{Not one unit out of $3072 \times 14$ ever swaps}
+\begin{frame}{No unit ever swaps across checkpoints}
   \centering
   \small
   \small
@@ -820,7 +820,7 @@ $1/768 = 0.0013$. The shared-init column is $1.0000$ at every checkpoint and its
 swaps. The residual basis gives the same answer ($1.0000$ against $0.0007$).\end{minipage}
 \end{frame}
 
-\begin{frame}{External replication: the factor survives on exactly the reseeded pairs}
+\begin{frame}{External replication: the factor survives on reseeded pairs}
   \centering
   \small
   \small
@@ -837,7 +837,7 @@ shared (\texttt{data-seed})    & $0.549$ & $0.011$ & $8.49{\to}8.49$ & $+0.18$ \
   \begin{minipage}{0.92\textwidth}\footnotesize The residual-basis factor survives acceptance on exactly the independently initialised pairs.\end{minipage}
 \end{frame}
 
-\begin{frame}{The decision is easy because the fact is binary}
+\begin{frame}{A binary diagnostic predicts the alignment benefit}
   \centering
   \small
   \small
@@ -858,7 +858,7 @@ CKA                                & $0.319$ & $0.177$ & $0.252$ & $0.997$ \\
 $280$ pairs, base rate $0.250$, split on pairs over $200$ repetitions.\end{minipage}
 \end{frame}
 
-\begin{frame}{Alignment's value grows with the number of models merged}
+\begin{frame}{Alignment's value grows with merge size}
   \centering
   \small
   \small
@@ -876,7 +876,7 @@ rescue                & $+0.871$ & $+1.951$ & $+2.363$ & $\mathbf{+2.455}$ \\
 model 1's frame.\end{minipage}
 \end{frame}
 
-\begin{frame}{The same split in three language pairs, including a non-Indo-European one}
+\begin{frame}{The same split across three language pairs}
   \centering
   \small
   \small
@@ -911,7 +911,7 @@ Pythia-160M & 2  & $0.117$ & $2/2$   & $+1.5$ \\
   \begin{minipage}{0.92\textwidth}\footnotesize External replication across three scales, all $\binom{9}{2}$ reseeded pairs at 14M and 70M.\end{minipage}
 \end{frame}
 
-\begin{frame}{Buying rescue with raw distance costs 40$\times$ more per unit}
+\begin{frame}{Buying rescue with distance costs 40$\times$ more per unit}
   \centering
   \small
   \begin{tabular}{lrrr}
