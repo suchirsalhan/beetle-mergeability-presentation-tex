@@ -1,0 +1,266 @@
+% ============================================================================
+% Mergeability Has a History -- the five-minute version.
+% Headline results and takeaways only. Full deck: main.tex
+% Every number here is reproduced by paper/make_beetle_mergeability_numbers.py
+% ============================================================================
+\documentclass{beamer}
+
+\usetheme{cambridge}
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage[UKenglish]{isodate}
+\cleanlookdateon
+
+\setbeamerfont{frametitle}{size=\normalsize,series=\bfseries}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1ex,right]{footline}%
+      \usebeamerfont{page number in head/foot}%
+      \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+    \end{beamercolorbox}%
+  }%
+}
+
+\title{{\bf Mergeability Has a History}}
+\subtitle{Training provenance determines removable representation mismatch}
+\author{\textbf{Suchir Salhan} \\ sas245@cam.ac.uk}
+\institute[CL]{Computer Laboratory, University of Cambridge, UK}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ---------------------------------------------------------------- 1. problem
+\begin{frame}{Merging fails for two reasons, and the tooling cannot tell them apart}
+  \begin{itemize}
+    \item Two models can be incompatible because they organise the same computation under
+          \structure{different coordinates} --- or because they \structure{learned different
+          things}.
+    \item The first is removable by a function-preserving map. The second is not.
+    \item Which one you face decides whether alignment is worth running at all.
+  \end{itemize}
+  \vfill
+  \begin{block}{The question}
+    When can representational alignment rescue model merging, and when can it not?
+  \end{block}
+  \vfill
+  {\footnotesize Design: fix architecture, parameter count, tokenizer, data budget, optimiser and
+  evaluation. Vary \emph{one factor of the training history} at a time --- initialisation, data
+  order, curriculum, first language --- then apply alignment as an \alert{intervention} and measure
+  what it recovers.}
+\end{frame}
+
+% ---------------------------------------------------------------- 2. answer
+\begin{frame}{The answer is narrower than the framing we began with}
+  \vfill
+  \begin{block}{}
+    \centering\large
+    Alignment rescues merging when, and essentially only when,\\
+    two models were \alert{initialised apart}.
+  \end{block}
+  \vfill
+  \begin{itemize}
+    \item Not how \emph{different} two training histories were --- only whether they started from
+          the same weights.
+    \item Data order, curriculum and even a different first language leave models in a
+          \structure{shared coordinate system}.
+    \item The obstruction is \structure{fixed at step 0}: training neither creates nor removes it.
+  \end{itemize}
+  \vfill
+\end{frame}
+
+% ---------------------------------------------------------------- 3. ladder
+\begin{frame}{Result 1: the largest composition costs are the most removable}
+  \centering
+  \begin{tabular}{lrrrr}
+    \toprule
+    what differs & $n$ & naive & aligned & coord.\ share \\
+    \midrule
+    \textbf{initialisation}     & 3 & $2.298$ & $\mathbf{0.150}$ & $\mathbf{+93\%}$ \\
+    data order                  & 4 & $0.553$ & $0.705$          & $-27\%$ \\
+    curriculum, shared init     & 2 & $0.796$ & $0.592$          & $+26\%$ \\
+    curriculum, new init        & 2 & $2.287$ & $0.593$          & $\mathbf{+74\%}$ \\
+    first language              & 2 & $1.412$ & $0.524$          & $+63\%$ \\
+    \bottomrule
+  \end{tabular}
+  \vfill
+  {\footnotesize Stitch penalty in nats/token. Initialisation costs about four times what data
+  order costs --- and the two costs are of \emph{different kinds}: a fitted map removes 93\% of the
+  first and makes the second \alert{worse} by 27\%. That negative rung matters most: it is a case
+  where alignment \emph{must not} help, and it does not.}
+\end{frame}
+
+% ---------------------------------------------------------------- 4. merges
+\begin{frame}{Result 2: 2,320 merges, cut on initialisation rather than on our own labels}
+  \centering
+  \begin{tabular}{lrrrr}
+    \toprule
+    & pairs & rescue & 95\% CI & improved \\
+    \midrule
+    indep.\ init (seed regime)   & 64  & $+0.244$ & $[+0.163,+0.321]$ & $73\%$ \\
+    indep.\ init (curric.\ reg.) & 8   & $+0.238$ & $[+0.214,+0.261]$ & $94\%$ \\
+    \textbf{shared init}         & 208 & $-0.000$ & $[-0.000,+0.000]$ & $7\%$ \\
+    \bottomrule
+  \end{tabular}
+  \vfill
+  {\footnotesize Two different experiments with different curricula give $+0.244$ and $+0.238$,
+  intervals overlapping almost entirely, while 208 shared-initialisation pairs give $-0.000$.
+  Bootstrapped over \emph{pairs}, not rows. The diagnostic even \structure{corrected our own
+  experimental metadata}: two curriculum pairs were independently initialised, the weights said so
+  with no access to training logs, and the functional outcome followed the diagnostic rather than
+  the label.}
+\end{frame}
+
+% ---------------------------------------------------------------- 5. controls
+\begin{frame}{Result 3: it is the symmetry, not the distance and not the flexibility}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Distance-matched}\\[0.3em]
+      {\footnotesize Interpolating $B$ toward $A$ by the same distance the map removes buys
+      $+0.036$; the map buys $\mathbf{+1.405}$.}
+      \vspace{0.6em}
+      \begin{center}\large $\mathbf{39\times}$\end{center}
+      \vspace{0.6em}
+      \textbf{Divergence-matched}\\[0.3em]
+      {\footnotesize A pair placed equally far apart with its removable component exhausted by
+      construction recovers \textbf{exactly $0.000$} --- in all 18 cells.}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Which symmetry class?}\\[0.3em]
+      {\footnotesize Stitch penalty, deep seams:}
+      \begin{center}\footnotesize
+      \begin{tabular}{lrr}
+        \toprule
+        & identity & best \\
+        \midrule
+        permutation $S_1$      & $1.880$ & $0.474$ \\
+        orthogonal $S_3$       & $1.880$ & $\mathbf{0.132}$ \\
+        $GL(d)$ $S_4$          & $1.880$ & $2.128$ \\
+        \bottomrule
+      \end{tabular}
+      \end{center}
+      {\footnotesize $GL(d)$ contains every other class and fits its own objective best --- and it
+      is \alert{worse than doing nothing}. It does not commute with RMSNorm, so it is not a
+      symmetry at all.}
+    \end{column}
+  \end{columns}
+  \vfill
+  \begin{block}{}
+    \centering Alignment works through \structure{symmetry}, not distance reduction.
+    \structure{Symmetry beats flexibility.}
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------- 6. drift
+\begin{frame}{Result 4: is this true by construction? No --- and we measured it}
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      {\footnotesize The objection: if two runs start from identical weights and no permutation is
+      applied, units keep their identity \emph{by definition}.
+      \vspace{0.5em}
+
+      The testable alternative: \structure{representational drift} --- units gradually change role
+      over a long run, so the best correspondence stops being the identity.}
+    \end{column}
+    \begin{column}{0.52\textwidth}
+      \centering\footnotesize
+      \begin{tabular}{lcc}
+        \toprule
+        checkpoint & shared init & indep.\ init \\
+        \midrule
+        \texttt{step-0}    & $1.0000$ & $0.0003$ \\
+        \texttt{step-128}  & $1.0000$ & $0.0003$ \\
+        \texttt{step-2048} & $1.0000$ & $0.0003$ \\
+        \texttt{main}      & $\mathbf{1.0000}$ & $\mathbf{0.0003}$ \\
+        \bottomrule
+      \end{tabular}
+      \\[0.4em]
+      {\footnotesize Chance is $1/768 = 0.0013$.}
+    \end{column}
+  \end{columns}
+  \vfill
+  \begin{block}{Drift does not happen, at all}
+    The minimum over \emph{every layer of every checkpoint} is also $1.0000$: not one unit out of
+    $3072 \times 14$ ever swaps. The claim is not definitional --- drift was a live alternative and
+    is measured to be exactly zero --- and the obstruction is therefore \alert{fixed at step 0}.
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------- 7. generality
+\begin{frame}{Result 5: it holds outside our zoo, beyond two models, and across languages}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Another lab's models}\\[0.2em]
+      {\footnotesize PolyPythia, 14M / 70M / 160M: the residual-basis factor survives acceptance on
+      \textbf{74 of 74} independently initialised pairs. The detector never misses. Rescue falls
+      with scale ($+23.6$, $+6.1$, $+1.5$).}
+      \vspace{0.8em}
+
+      \textbf{Three language pairs}\\[0.2em]
+      {\footnotesize Coordinate share $+92\%$ (nld), $+89\%$ (deu), $+93\%$ (zho), against
+      $-26\%$ for the shared-init rung. Same dissociation, including a non-Indo-European pair.}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{More than two models}\\[0.2em]
+      \centering\footnotesize
+      \begin{tabular}{lrrrr}
+        \toprule
+        $k$ & 2 & 3 & 4 & 5 \\
+        \midrule
+        naive   & $-1.86$ & $-3.28$ & $-3.74$ & $-3.95$ \\
+        aligned & $-0.99$ & $-1.33$ & $-1.38$ & $-1.49$ \\
+        \textbf{rescue} & $+0.87$ & $+1.95$ & $+2.36$ & $\mathbf{+2.46}$ \\
+        \bottomrule
+      \end{tabular}
+      \\[0.5em]
+      {\footnotesize \raggedright Naive merging collapses as models are added; the aligned merge
+      barely moves. \alert{Alignment's value grows with merge size} --- the strongest practical
+      statement in the paper.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 8. takeaways
+\begin{frame}{Takeaways}
+  \begin{enumerate}
+    \item \structure{Alignment does not make models mergeable.} It removes \emph{one} obstruction,
+          present when and essentially only when two models were initialised apart.
+    \item \structure{Provenance is the index, not similarity.} Data order, curriculum and first
+          language create large functional divergence with \emph{no} coordinate component.
+    \item \structure{Group membership is the currency.} Not distance, not flexibility --- the
+          richest map, $GL(d)$, is worse than no map at all.
+    \item \structure{The obstruction is fixed at step 0 and never decays.} Cost of composing grows
+          $916\times$ over training while the removable share stays above $92\%$.
+    \item \structure{Decidable in advance.} Held-out AUROC $0.944$ from the weights alone --- though
+          a plain weight cosine reaches $0.933$, because the underlying fact is binary.
+  \end{enumerate}
+  \vfill
+  {\footnotesize \alert{Honest limit:} these are $\leq$200M models pretrained from scratch, where
+  merging is destructive in absolute terms ($-1.06$ naive, $-0.82$ aligned). Alignment moves merges
+  from very bad to less bad. The claim is about the \emph{composition of the barrier}, not about
+  producing usable merged models at this scale --- and its condition, shared initialisation, is
+  exactly what holds in the fine-tuning regime where merging does work.}
+\end{frame}
+
+\begin{frame}{}
+  \vfill
+  \begin{block}{}
+    \centering\large
+    Whatever pretraining does to make two models incompatible,\\
+    it is not making their difference \alert{irreducible}.
+  \end{block}
+  \vfill
+  \centering{\footnotesize Full deck, every figure and table: \texttt{main.pdf}}
+  \vfill
+\end{frame}
+
+\end{document}

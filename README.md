@@ -3,12 +3,18 @@
 Every figure and table from the `jrf_beetle` representational-analysis suite and the
 **Mergeability Has a History** paper, one per slide, on the Cambridge Beamer template.
 
-**[main.pdf](main.pdf) --- 128 slides, compiled and committed.**
+| deck | slides | for |
+|---|---|---|
+| **[tldr.pdf](tldr.pdf)** | 10 | a five-minute talk: headline results and takeaways only |
+| **[main.pdf](main.pdf)** | 111 | every figure and table |
+
+[`tldr-script.md`](tldr-script.md) is a timed speaking script for the short deck, with a
+three-minute cut and the questions to expect.
 
 ## Build
 
 ```bash
-make            # -> main.pdf  (two pdflatex passes, for the contents page)
+make            # -> main.pdf and tldr.pdf
 ```
 
 Overleaf: upload the repository and set `main.tex` as the compile target.
